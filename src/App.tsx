@@ -6,7 +6,7 @@ import { AppThemeProvider } from "./shared/contexts/ThemeContext";
 
 export const  App = () => {
   return (
-    <AppThemeProvider>
+      <AppThemeProvider>
       <BrowserRouter>
         <AppRoutes />
       </BrowserRouter>
