@@ -1,10 +1,42 @@
 import { Avatar, Box, Divider, Drawer, Icon, List, ListItemButton, ListItemIcon, ListItemText, useMediaQuery, useTheme } from "@mui/material";
 import  ImagemSecretaria  from "../../../../src/assets/secretariaEscola.png";
 import { useDrawerContext } from "../../contexts";
+import { useMatch, useNavigate, useResolvedPath } from "react-router-dom";
 
 interface IMenuLateralProps {
     children: React.ReactNode; 
 }
+
+interface IListItemLinkProps {
+    to: string;
+    label: string;
+    icon: string;
+    onClick: (() => void) | undefined;
+
+}
+
+const ListItemLink: React.FC<IListItemLinkProps> = ({ to, label, icon, onClick  }) => {
+    const navigate = useNavigate();
+
+    const resolvedPath = useResolvedPath(to);
+    const match = useMatch({ path: resolvedPath.pathname, end: false})
+
+const handleClick = () => {
+    onClick?.();
+    navigate(to);
+};
+
+    return(
+        <ListItemButton selected={!!match} onClick={handleClick}>
+            <ListItemIcon>
+                <Icon color="primary">{icon}</Icon>
+            </ListItemIcon>
+            <ListItemText primary={label} />
+        </ListItemButton>
+
+            
+    );
+};
 
 export const MenuLateral: React.FC<IMenuLateralProps> = ({ children }) => {
 
@@ -25,12 +57,11 @@ export const MenuLateral: React.FC<IMenuLateralProps> = ({ children }) => {
                     
                     <Box flex={1}>
                         <List component="nav">
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <Icon>home</Icon>
-                            </ListItemIcon>
-                        <ListItemText primary="Página inicial" />
-                            </ListItemButton>
+                            <ListItemLink to="/pagina-inicial" label="Dashboard" icon={"home"} onClick={smDown ? toggleDrawerOpen : undefined} />
+                            <ListItemLink to="/alunos" label="Alunos" icon={"schoolIcon"} onClick={smDown ? toggleDrawerOpen : undefined} />
+                            <ListItemLink to="/professores" label="Professores" icon={"peopleAltIcon"} onClick={smDown ? toggleDrawerOpen : undefined} /> 
+                            <ListItemLink to="/turmas" label="Turmas" icon={"classIcon"} onClick={smDown ? toggleDrawerOpen : undefined} /> 
+                            <ListItemLink to="meu-perfil" label="Meu perfil" icon={"engineeringIcon"} onClick={smDown ? toggleDrawerOpen : undefined} />    
                         </List>
                     </Box>
                 </Box>
@@ -38,7 +69,7 @@ export const MenuLateral: React.FC<IMenuLateralProps> = ({ children }) => {
 
             <Box height="100vh" marginLeft={smDown ? 0 : theme.spacing(28)}>
                 {children}
-                </Box>
+            </Box>
         </>
        
     );
